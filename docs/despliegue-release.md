@@ -31,3 +31,13 @@ La aplicación usa SQLite. El almacenamiento local de un servicio web gratuito p
 - Revisar Actions para verificar que CI y el artefacto de Release hayan finalizado correctamente.
 - Registrar incidencias como GitHub Issues.
 - No marcar el despliegue como completado hasta abrir y probar la URL pública.
+
+## Despliegue en Vercel (alternativa a Render)
+La aplicación Flask se puede importar desde GitHub en Vercel. El repositorio ya exporta la instancia Flask como `app` en `app.py` y contiene `Flask` en `requirements.txt`.
+1. El archivo `.python-version` debe indicar `3.12` (versión menor), no fijarse a `3.12.7`. Vercel admite Python 3.12, 3.13 y 3.14; solicitar el parche exacto 3.12.7 causó el error de intérprete no encontrado.
+2. Importar el repositorio en https://vercel.com/new y dejar la detección de Flask/Python automática.
+3. No introducir comandos de Node ni un comando de inicio Gunicorn personalizado para este despliegue; Vercel detecta Flask desde `requirements.txt` y `app.py`.
+4. Volver a desplegar después del commit que actualiza `.python-version`. Si aparece el mismo registro, hacer Redeploy con Clear Cache.
+5. Probar la página principal y `/health`.
+
+**Persistencia:** SQLite en un directorio temporal de una función serverless no proporciona almacenamiento persistente garantizado. Para una prueba académica es posible comprobar la carga y los endpoints, pero no prometer que las tareas permanezcan después de reinicios. Para uso real, migrar a una base administrada como PostgreSQL.
