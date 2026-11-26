@@ -99,3 +99,13 @@ def test_delete_task(client):
 def test_update_missing_task_returns_404(client):
     response = client.put("/api/tasks/999", json={"title": "No existe"})
     assert response.status_code == 404
+
+
+def test_health_endpoint_checks_database(client):
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.get_json() == {
+        "status": "ok",
+        "service": "TaskManager",
+        "database": "ok",
+    }
