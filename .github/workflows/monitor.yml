@@ -17,7 +17,14 @@ jobs:
           APP_URL: ${{ secrets.TASKMANAGER_URL }}
         run: |
           if [ -z "$APP_URL" ]; then
-            echo "TASKMANAGER_URL no está configurada. Configura TASKMANAGER_URL después del despliegue."
+            echo "TASKMANAGER_URL no está configurada. Configura el secreto después del despliegue."
             exit 0
           fi
-          curl --fail --silent --show-error --retry 2 --retry-delay 5 "$APP_URL/health"
+
+          APP_URL="${APP_URL%/}"
+          RESPONSE="$(curl --location --fail --silent --show-error --retry 2 --retry-delay 5 "$APP_URL/health")"
+
+          echo "Respuesta del endpoint /health:"
+          echo "$RESPONSE"
+
+          echo "$RESPONSE" | python -c 'import json,sys; data=json.load(sys.stdin); assert data.get("status") == "ok", "La aplicación no reportó status=ok"; assert data.get("database") == "ok", "La base de datos no reportó database=ok"; print("Monitoreo correcto: aplicación y base de datos disponibles.")'
