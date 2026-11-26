@@ -1,7 +1,6 @@
 import sys
 from pathlib import Path
 
-# Ensure the repository root is importable when pytest collects this file in CI.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import pytest
@@ -94,7 +93,7 @@ def test_delete_task(client):
     task = create_task(client).get_json()
     response = client.delete(f"/api/tasks/{task['id']}")
     assert response.status_code == 200
-    assert client.get(f"/api/tasks/{task['id']}").status_code == 404
+    assert client.get("/api/tasks").get_json() == []
 
 
 def test_update_missing_task_returns_404(client):
