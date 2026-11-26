@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TaskManager | Gestión de tareas</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <header><p>TECHSOLUTIONS</p><h1>TaskManager</h1><span>Organiza. Prioriza. Avanza.</span></header>
+  <main>
+    <section class="intro"><h2>Administra tus tareas</h2><p>Registra actividades, asigna prioridades y da seguimiento a tu trabajo.</p></section>
+    <section class="panel">
+      <h2>Registrar tarea</h2>
+      <form id="task-form">
+        <label>Nombre de la tarea *<input id="title" maxlength="120" required></label>
+        <label>Descripción<textarea id="description" rows="3" maxlength="1000"></textarea></label>
+        <label>Prioridad<select id="priority"><option value="high">Alta</option><option value="medium" selected>Media</option><option value="low">Baja</option></select></label>
+        <button type="submit">Agregar tarea</button><p id="message" role="status"></p>
+      </form>
+    </section>
+    <section class="panel"><h2>Listado de tareas</h2><div class="filters">
+      <input id="search" type="search" placeholder="Buscar tarea...">
+      <select id="status-filter"><option value="all">Todos los estados</option><option value="pending">Pendiente</option><option value="in_progress">En proceso</option><option value="completed">Terminada</option></select>
+    </div><div id="task-list">Cargando tareas...</div></section>
+  </main>
+</body></html>
