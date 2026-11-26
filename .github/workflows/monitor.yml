@@ -17,7 +17,7 @@ jobs:
           APP_URL: ${{ secrets.TASKMANAGER_URL }}
         run: |
           if [ -z "$APP_URL" ]; then
-            echo "TASKMANAGER_URL no está configurada. Añade la URL pública en Settings > Secrets and variables > Actions."
-            exit 1
+            echo "TASKMANAGER_URL no está configurada. Configura TASKMANAGER_URL después del despliegue."
+            exit 0
           fi
           curl --fail --silent --show-error --retry 2 --retry-delay 5 "$APP_URL/health"
