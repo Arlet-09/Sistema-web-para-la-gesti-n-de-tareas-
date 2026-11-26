@@ -10,7 +10,7 @@ VALID_PRIORITIES = {"high", "medium", "low"}
 def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_mapping(
-        DATABASE=os.environ.get("TASKMANAGER_DATABASE", str(Path(app.instance_path) / "taskmanager.sqlite3")),
+        DATABASE=os.environ.get("TASKMANAGER_DATABASE", "/tmp/taskmanager.sqlite3" if os.environ.get("VERCEL") else str(Path(app.instance_path) / "taskmanager.sqlite3")),
         SECRET_KEY=os.environ.get("SECRET_KEY", "development-only-change-me"),
     )
     if test_config:
@@ -40,6 +40,12 @@ def create_app(test_config=None):
             updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
         )""")
         get_db().commit()
+
+    @app.get("/health")
+    def health():
+        # Comprueba tanto la aplicación como el acceso a SQLite.
+        get_db().execute("SELECT 1").fetchone()
+        return jsonify({"status": "ok", "service": "TaskManager", "database": "ok"})
 
     @app.get("/")
     def index():
